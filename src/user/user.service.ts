@@ -17,5 +17,5 @@ export class UserService {
         });
     }
 
-    async
+    
 }
