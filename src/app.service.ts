@@ -16,7 +16,7 @@ export class AppService {
     }
 
     return {
-      service: 'user-service',
+      service: 'user-serviceeeeeeee',
       status: 'ok',
       database,
       rabbitmqQueue: process.env.RABBITMQ_QUEUE ?? 'user_queue',
