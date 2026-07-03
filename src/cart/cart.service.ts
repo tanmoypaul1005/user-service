@@ -20,9 +20,11 @@ export class CartService {
 
     async addToCart(addToCartDto: AddToCartDto) {
         try {
-            const product = await lastValueFrom(
-                this.productClient!.send('cart.addToCart', addToCartDto.productId),
+
+           return await lastValueFrom(
+                this.productClient!.send('cart.addToCart', addToCartDto),
             );
+
         } catch (error) {
             throw new ServiceUnavailableException(
                 error?.message || 'Unable to reach product service via RabbitMQ.',

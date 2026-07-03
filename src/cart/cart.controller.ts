@@ -1,29 +1,31 @@
 import { CartService } from './cart.service';
-import { Body, Controller, Get, Post, UseGuards,Param } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
-  ApiForbiddenResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AdminGuard } from '../auth/admin.guard';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 
-@ApiTags('Products')
+@ApiTags('Cart')
 @ApiBearerAuth('bearer')
 @Controller('cart')
 export class CartController {
-    constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) {}
 
-    @Post()
-    @ApiOperation({ summary: 'Add product to cart through cart service' })
-    @ApiBody({ type: AddToCartDto })
-    async addToCart(@Body() addToCartDto: AddToCartDto) {
-        return this.cartService.addToCart(addToCartDto);
-    }
+  @Post()
+  @ApiOperation({ summary: 'Add product to cart through cart service' })
+  @ApiBody({ type: AddToCartDto })
+  @ApiCreatedResponse({ description: 'Product successfully added to cart' })
+  @ApiBadRequestResponse({ description: 'Invalid input data' })
+  @ApiUnauthorizedResponse({
+    description: 'Missing, invalid, or expired bearer token',
+  })
+  async addToCart(@Body() addToCartDto: AddToCartDto) {
+    return this.cartService.addToCart(addToCartDto);
+  }
 }

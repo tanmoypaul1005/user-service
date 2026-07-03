@@ -4,21 +4,29 @@ import { CartController } from './cart.controller';
 import { CartService } from './cart.service';
 import { PrismaService } from '../prisma.service';
 
+const rabbitMqEnabled = process.env.RABBITMQ_ENABLED === 'true';
+
 @Module({
   imports: [
-    ClientsModule.registerAsync([
-      {
-        name: 'PRODUCT_SERVICE',
-        useFactory: () => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: ['amqp://localhost:5672'],
-            queue: 'product_queue', // আপনার actual queue name
-            queueOptions: { durable: false },
-          },
-        }),
-      },
-    ]),
+    ...(rabbitMqEnabled
+      ? [
+          ClientsModule.registerAsync([
+            {
+              name: 'PRODUCT_SERVICE',
+              useFactory: () => ({
+                transport: Transport.RMQ,
+                options: {
+                  urls: [process.env.RABBITMQ_URL ?? 'amqp://localhost:5672'],
+                  queue: process.env.PRODUCT_RABBITMQ_QUEUE ?? 'product_queue',
+                  queueOptions: {
+                    durable: true,
+                  },
+                },
+              }),
+            },
+          ]),
+        ]
+      : []),
   ],
   controllers: [CartController],
   providers: [
@@ -26,7 +34,7 @@ import { PrismaService } from '../prisma.service';
     PrismaService,
     {
       provide: 'RABBITMQ_ENABLED',
-      useValue: true,
+      useValue: rabbitMqEnabled,
     },
   ],
 })
