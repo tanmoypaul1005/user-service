@@ -11,8 +11,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductService {
-  private readonly productServiceUrl =
-    process.env.PRODUCT_SERVICE_URL ?? 'http://localhost:3002';
 
   constructor(
     @Optional()
