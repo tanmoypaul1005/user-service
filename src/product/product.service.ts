@@ -44,11 +44,8 @@ export class ProductService {
   }
 
   async getProductById(id: number) {
-
     try {
-      return await lastValueFrom(
-        this.productClient!.send('product.getById', id),
-      );
+      return await lastValueFrom(this.productClient!.send('product.getById', id));
     } catch(error) {
       throw new ServiceUnavailableException(
         error?.message || 'Unable to reach product service via RabbitMQ.',

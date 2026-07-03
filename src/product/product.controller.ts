@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards,Param } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -50,7 +50,7 @@ export class ProductController {
   @ApiUnauthorizedResponse({
     description: 'Missing, invalid, or expired bearer token',
   })
-  async getProductById(@Body('id') id: number) {
+  async getProductById(@Param('id') id: number) {
     return this.productService.getProductById(id);
   }
 }
