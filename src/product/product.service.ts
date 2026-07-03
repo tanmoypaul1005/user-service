@@ -74,4 +74,19 @@ export class ProductService {
       );
     }
   }
+
+  async getProductById(id: number) {
+    if (!this.rabbitMqEnabled || !this.productClient) {
+      return this.fetchProductService(`/products/${id}`);
+    }
+
+    try {
+      return await lastValueFrom(
+        this.productClient!.send('product.getById', id),
+      );
+    } catch {
+      throw new ServiceUnavailableException(
+        'Unable to reach product service via RabbitMQ.',
+      );
+    }
 }

@@ -43,4 +43,14 @@ export class ProductController {
   async getAllProducts() {
     return this.productService.getAllProducts();
   }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get product by ID through product service' })
+  @ApiOkResponse({ description: 'Product details' })
+  @ApiUnauthorizedResponse({
+    description: 'Missing, invalid, or expired bearer token',
+  })
+  async getProductById(@Body('id') id: number) {
+    return this.productService.getProductById(id);
+  }
 }
