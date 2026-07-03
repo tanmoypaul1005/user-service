@@ -1,21 +1,77 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Inject,
+  Injectable,
+  Optional,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductService {
+  private readonly productServiceUrl =
+    process.env.PRODUCT_SERVICE_URL ?? 'http://localhost:3002';
+
   constructor(
-    @Inject('PRODUCT_SERVICE') private readonly productClient: ClientProxy,
+    @Optional()
+    @Inject('PRODUCT_SERVICE')
+    private readonly productClient: ClientProxy | null,
+    @Inject('RABBITMQ_ENABLED') private readonly rabbitMqEnabled: boolean,
   ) {}
 
+  private async fetchProductService(path: string, init?: RequestInit) {
+    try {
+      const response = await fetch(`${this.productServiceUrl}${path}`, init);
+
+      if (!response.ok) {
+        throw new BadGatewayException(
+          `Product service responded with ${response.status}.`,
+        );
+      }
+
+      return await response.json();
+    } catch {
+      throw new ServiceUnavailableException(
+        'Unable to reach product service over HTTP.',
+      );
+    }
+  }
+
   async createProduct(createProductDto: CreateProductDto) {
-    return lastValueFrom(
-      this.productClient.send('product.create', createProductDto),
-    );
+    if (!this.rabbitMqEnabled || !this.productClient) {
+      return this.fetchProductService('/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(createProductDto),
+      });
+    }
+
+    try {
+      return await lastValueFrom(
+        this.productClient!.send('product.create', createProductDto),
+      );
+    } catch {
+      throw new ServiceUnavailableException(
+        'Unable to reach product service via RabbitMQ.',
+      );
+    }
   }
 
   async getAllProducts() {
-    return lastValueFrom(this.productClient.send('product.getAll', {}));
+    if (!this.rabbitMqEnabled || !this.productClient) {
+      return this.fetchProductService('/products');
+    }
+
+    try {
+      return await lastValueFrom(this.productClient!.send('product.getAll', {}));
+    } catch {
+      throw new ServiceUnavailableException(
+        'Unable to reach product service via RabbitMQ.',
+      );
+    }
   }
 }
