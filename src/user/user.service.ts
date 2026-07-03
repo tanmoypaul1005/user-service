@@ -18,12 +18,25 @@ export class UserService {
         return this.prisma.user.create({
             data: {
                 email,
-                password:hashedPassword,
+                password: hashedPassword,
                 role,
                 name,
             },
         });
     }
 
+    async loginUser(email: string, password: string) {
+        const user = await this.prisma.user.findUnique({ where: { email } });
 
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            throw new Error('Invalid password');
+        }
+
+        return user;
+    }
 }
