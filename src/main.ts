@@ -10,6 +10,16 @@ async function bootstrap() {
     .setDescription('User and product gateway API')
     .setVersion('1.0')
     .addServer('http://localhost:3001', 'Local API Gateway')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        in: 'header',
+      },
+      'bearer',
+    )
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, swaggerDocument);

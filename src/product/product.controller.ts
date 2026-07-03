@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOperation,
@@ -10,6 +11,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 
 @ApiTags('Products')
+@ApiBearerAuth('bearer')
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}

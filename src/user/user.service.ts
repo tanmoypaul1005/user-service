@@ -56,7 +56,7 @@ export class UserService {
             email: user.email,
             role: user.role,
             name: user.name,
-            accessToken: `Bearer ${token}`,
+            accessToken: `${token}`,
         };
     }
 
