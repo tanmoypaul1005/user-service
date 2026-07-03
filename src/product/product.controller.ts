@@ -1,10 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -31,5 +32,15 @@ export class ProductController {
   @ApiForbiddenResponse({ description: 'Only admin can create products' })
   async createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productService.createProduct(createProductDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all products through product service' })
+  @ApiOkResponse({ description: 'List of all products' })
+  @ApiUnauthorizedResponse({
+    description: 'Missing, invalid, or expired bearer token',
+  })
+  async getAllProducts() {
+    return this.productService.getAllProducts();
   }
 }

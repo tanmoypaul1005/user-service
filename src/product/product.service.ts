@@ -14,4 +14,8 @@ export class ProductService {
       this.productClient.send('product.create', createProductDto),
     );
   }
+
+  async getAllProducts() {
+    return lastValueFrom(this.productClient.send('product.getAll', {}));
+  }
 }
