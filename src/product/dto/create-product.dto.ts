@@ -5,13 +5,13 @@ export class CreateProductDto {
     example: 'Laptop',
     description: 'Product name',
   })
-  name: string;
+  name?: string;
 
   @ApiProperty({
     example: '1200',
     description: 'Product price',
   })
-  price: string;
+  price?: string;
 
   @ApiPropertyOptional({
     example: 10,
