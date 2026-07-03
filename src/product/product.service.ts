@@ -21,35 +21,7 @@ export class ProductService {
     @Inject('RABBITMQ_ENABLED') private readonly rabbitMqEnabled: boolean,
   ) {}
 
-  private async fetchProductService(path: string, init?: RequestInit) {
-    try {
-      const response = await fetch(`${this.productServiceUrl}${path}`, init);
-
-      if (!response.ok) {
-        throw new BadGatewayException(
-          `Product service responded with ${response.status}.`,
-        );
-      }
-
-      return await response.json();
-    } catch {
-      throw new ServiceUnavailableException(
-        'Unable to reach product service over HTTP.',
-      );
-    }
-  }
-
   async createProduct(createProductDto: CreateProductDto) {
-    if (!this.rabbitMqEnabled || !this.productClient) {
-      return this.fetchProductService('/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createProductDto),
-      });
-    }
-
     try {
       return await lastValueFrom(
         this.productClient!.send('product.create', createProductDto),
@@ -62,10 +34,6 @@ export class ProductService {
   }
 
   async getAllProducts() {
-    if (!this.rabbitMqEnabled || !this.productClient) {
-      return this.fetchProductService('/products');
-    }
-
     try {
       return await lastValueFrom(this.productClient!.send('product.getAll', {}));
     } catch {
@@ -76,9 +44,6 @@ export class ProductService {
   }
 
   async getProductById(id: number) {
-    if (!this.rabbitMqEnabled || !this.productClient) {
-      return this.fetchProductService(`/products/${id}`);
-    }
 
     try {
       return await lastValueFrom(
