@@ -49,9 +49,9 @@ export class ProductService {
       return await lastValueFrom(
         this.productClient!.send('product.getById', id),
       );
-    } catch {
+    } catch(error) {
       throw new ServiceUnavailableException(
-        'Unable to reach product service via RabbitMQ.',
+        error?.message || 'Unable to reach product service via RabbitMQ.',
       );
     }
 }
