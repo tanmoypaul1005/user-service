@@ -1,5 +1,4 @@
 import {
-  BadGatewayException,
   Inject,
   Injectable,
   Optional,
@@ -20,14 +19,13 @@ export class CartService {
 
     async addToCart(addToCartDto: AddToCartDto) {
         try {
-
            return await lastValueFrom(
                 this.productClient!.send('cart.addToCart', addToCartDto),
             );
 
         } catch (error) {
             throw new ServiceUnavailableException(
-                error?.message || 'Unable to reach product service via RabbitMQ.',
+               'Unable to reach product service via RabbitMQ.',
             );
         }
 }
