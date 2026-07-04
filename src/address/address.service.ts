@@ -17,4 +17,12 @@ export class AddressService {
     async getAllAddress(){
         return this.orderClient!.send('address.getAll', {});
     }
+
+    async updateAddress(id: string, address: string) {
+        return this.orderClient!.send('address.update', { id, address });
+    }
+
+    async deleteAddress(id: string) {
+        return this.orderClient!.send('address.delete', { id });
+    }
 }
