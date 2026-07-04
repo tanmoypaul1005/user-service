@@ -13,4 +13,8 @@ export class AddressService {
     async createAddress(address: string) {
         return this.orderClient!.send('address.create', { address });
     }
+
+    async getAllAddress(){
+        return this.orderClient!.send('address.getAll', {});
+    }
 }
