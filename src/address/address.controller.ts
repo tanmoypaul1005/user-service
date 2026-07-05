@@ -7,7 +7,7 @@ import { CreateAddressDto } from './dto/add.address.dto';
 @ApiBearerAuth('bearer')
 @Controller('address')
 export class AddressController {
-    
+
     constructor(private readonly addressService: AddressService) { }
 
     @Post()
@@ -36,4 +36,5 @@ export class AddressController {
     async deleteAddress(@Param('id') id: string) {
         return this.addressService.deleteAddress(id);
     }
+    
 }
