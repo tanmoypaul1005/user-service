@@ -7,6 +7,7 @@ import { CreateAddressDto } from './dto/add.address.dto';
 @ApiBearerAuth('bearer')
 @Controller('address')
 export class AddressController {
+    
     constructor(private readonly addressService: AddressService) { }
 
     @Post()
