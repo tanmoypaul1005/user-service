@@ -15,18 +15,18 @@ export class CartService {
     @Inject('PRODUCT_SERVICE')
     private readonly productClient: ClientProxy | null,
     @Inject('RABBITMQ_ENABLED') private readonly rabbitMqEnabled: boolean,
-  ) {}
+  ) { }
 
-    async addToCart(addToCartDto: AddToCartDto) {
-        try {
-           return await lastValueFrom(
-                this.productClient!.send('cart.addToCart', addToCartDto),
-            );
+  async addToCart(addToCartDto: AddToCartDto) {
+    try {
+      return await lastValueFrom(
+        this.productClient!.send('cart.addToCart', addToCartDto),
+      );
 
-        } catch (error) {
-            throw new ServiceUnavailableException(
-               'Unable to reach product service via RabbitMQ.',
-            );
-        }
-}
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        'Unable to reach product service via RabbitMQ.',
+      );
+    }
+  }
 }
