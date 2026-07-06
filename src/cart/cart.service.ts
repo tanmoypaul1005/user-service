@@ -29,4 +29,16 @@ export class CartService {
       );
     }
   }
+
+  async getCartItems(userId: string) {
+    try {
+      return await lastValueFrom(
+        this.productClient!.send('cart.getCartItems', userId),
+      );
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        'Unable to reach product service via RabbitMQ.',
+      );
+    }
+  }
 }
