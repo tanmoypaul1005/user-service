@@ -1,6 +1,7 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { ClientProxy } from '@nestjs/microservices';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 
@@ -14,13 +15,15 @@ export class CategoryService {
 
     async getAllCategories() {
         try {
-            return await lastValueFrom(this.productClient!.send("category.getAllCategories", {}));
+            return await lastValueFrom(
+                this.productClient!.send('category.getAllCategories', {}),
+            );
         } catch (error) {
             throw error;
         }
     }
 
-    async createCategory(data: { name: string }) {
+    async createCategory(data: CreateCategoryDto) {
         try {
             return await lastValueFrom(this.productClient!.send("category.createCategory", data));
         } catch (error) {

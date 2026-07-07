@@ -12,12 +12,12 @@ const rabbitMqEnabled = process.env.RABBITMQ_ENABLED === 'true';
       ? [
           ClientsModule.registerAsync([
             {
-              name: 'CATEGORY_SERVICE',
+              name: 'PRODUCT_SERVICE',
               useFactory: () => ({
                 transport: Transport.RMQ,
                 options: {
                   urls: [process.env.RABBITMQ_URL ?? 'amqp://localhost:5672'],
-                  queue: process.env.CATEGORY_RABBITMQ_QUEUE ?? 'category_queue',
+                  queue: process.env.CATEGORY_RABBITMQ_QUEUE ??  'product_queue',
                   queueOptions: {
                     durable: true,
                   },
