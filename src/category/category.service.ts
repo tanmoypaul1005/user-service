@@ -14,11 +14,18 @@ export class CategoryService {
 
     async getAllCategories() {
         try {
-            return await lastValueFrom(this.productClient!.send("category.getAllCategories",{}));
+            return await lastValueFrom(this.productClient!.send("category.getAllCategories", {}));
         } catch (error) {
             throw error;
         }
     }
 
-    
+    async createCategory(data: { name: string }) {
+        try {
+            return await lastValueFrom(this.productClient!.send("category.createCategory", data));
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
