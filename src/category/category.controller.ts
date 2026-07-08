@@ -12,9 +12,4 @@ export class CategoryController {
         return this.categoryService.getAllCategories();
     }
 
-    @Post()
-    @ApiBody({ type: CreateCategoryDto })
-    async createCategory(@Body() data: CreateCategoryDto) {
-        return this.categoryService.createCategory(data);
-    }
 }

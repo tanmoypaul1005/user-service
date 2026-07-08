@@ -1,5 +1,4 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
 import { CreateBrandDto } from './dto/create.brand.dto';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { ClientProxy } from '@nestjs/microservices';

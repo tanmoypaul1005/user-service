@@ -23,15 +23,5 @@ export class CategoryService {
         }
     }
 
-    async createCategory(data: CreateCategoryDto) {
-        try {
-            return await lastValueFrom(this.productClient!.send("category.createCategory", data));
-        } catch (error) {
-            throw {
-                error: 'Unable to reach product service via RabbitMQ.',
-                details: error
-            };
-        }
-    }
 
 }
