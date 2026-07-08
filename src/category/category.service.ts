@@ -27,7 +27,10 @@ export class CategoryService {
         try {
             return await lastValueFrom(this.productClient!.send("category.createCategory", data));
         } catch (error) {
-            throw error;
+            throw {
+                error: 'Unable to reach product service via RabbitMQ.',
+                details: error
+            };
         }
     }
 

@@ -15,6 +15,6 @@ export class CategoryController {
     @Post()
     @ApiBody({ type: CreateCategoryDto })
     async createCategory(@Body() data: CreateCategoryDto) {
-        return this.categoryService.createCategory({ name: data.name });
+        return this.categoryService.createCategory(data);
     }
 }
