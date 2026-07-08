@@ -1,22 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateBrandDto } from './dto/create.brand.dto';
+import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class BrandService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+        @Optional()
+        @Inject('PRODUCT_SERVICE')
+        private readonly productClient: ClientProxy | null,
+        @Inject('RABBITMQ_ENABLED') private readonly rabbitMqEnabled: boolean,
+    ) { }
 
 
     async createBrand(data: CreateBrandDto) {
-        return this.prisma.brand.create({
-            data: {
-                name: data.name ?? '',
-                slug: data.slug ?? '',
-                description: data.description ?? '',
-                logoUrl: data.logoUrl ?? '',
-                isActive: data.isActive ?? false
-            }
-        });
+        return await lastValueFrom(this.productClient!.send('brand.createBrand', data));
     }
 
 }

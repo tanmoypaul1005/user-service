@@ -19,9 +19,7 @@ export class CartService {
 
   async addToCart(addToCartDto: AddToCartDto) {
     try {
-      return await lastValueFrom(
-        this.productClient!.send('cart.addToCart', addToCartDto),
-      );
+      return await lastValueFrom(this.productClient!.send('cart.addToCart', addToCartDto));
 
     } catch (error) {
       throw new ServiceUnavailableException(
