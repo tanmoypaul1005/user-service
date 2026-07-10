@@ -5,6 +5,7 @@ import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class BrandService {
+    
     constructor(
         @Optional()
         @Inject('PRODUCT_SERVICE')
