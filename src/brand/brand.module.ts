@@ -38,4 +38,5 @@ const rabbitMqEnabled = process.env.RABBITMQ_ENABLED === 'true';
     },
   ],
 })
+
 export class BrandModule {}
