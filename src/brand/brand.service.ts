@@ -4,6 +4,7 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
+
 export class BrandService {
     
     constructor(
