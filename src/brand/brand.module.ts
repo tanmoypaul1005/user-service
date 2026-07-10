@@ -5,6 +5,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PrismaService } from '../prisma.service';
 
 const rabbitMqEnabled = process.env.RABBITMQ_ENABLED === 'true';
+
 @Module({
   imports: [
     ...(rabbitMqEnabled
